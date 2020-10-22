@@ -80,6 +80,9 @@ class << RSpec::OpenAPI::SchemaBuilder = Object.new
 
   def build_property(value)
     property = { type: build_type(value) }
+
+    property[:format] = 'float' if value.is_a? Float
+
     case value
     when Array
       property[:items] = build_property(value.first)
@@ -97,10 +100,10 @@ class << RSpec::OpenAPI::SchemaBuilder = Object.new
     case value
     when String
       'string'
-    when Float
-      'float'
     when Integer
       'integer'
+    when Numeric
+      'number'
     when TrueClass, FalseClass
       'boolean'
     when Array
