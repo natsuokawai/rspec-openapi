@@ -80,6 +80,7 @@ class << RSpec::OpenAPI::SchemaBuilder = Object.new
 
   def build_property(value)
     property = { type: build_type(value) }
+    property[:format] = 'binary' if value.is_a? ActionDispatch::Http::UploadedFile
     case value
     when Array
       property[:items] = build_property(value.first)
@@ -95,7 +96,7 @@ class << RSpec::OpenAPI::SchemaBuilder = Object.new
 
   def build_type(value)
     case value
-    when String
+    when String, ActionDispatch::Http::UploadedFile
       'string'
     when Float
       'float'
